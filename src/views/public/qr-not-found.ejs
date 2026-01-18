@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      header {
+        background-color: rgba(44, 62, 80, 0.95);
+        color: white;
+        padding: 20px;
+        text-align: center;
+      }
+
+      header h1 {
+        font-size: 24px;
+        letter-spacing: 2px;
+      }
+
+      .container {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
+      }
+
+      .error-box {
+        background: white;
+        padding: 60px;
+        border-radius: 8px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+      }
+
+      .error-icon {
+        font-size: 80px;
+        margin-bottom: 20px;
+      }
+
+      .error-box h2 {
+        color: #2c3e50;
+        margin-bottom: 15px;
+        font-size: 28px;
+      }
+
+      .error-box p {
+        color: #7f8c8d;
+        margin-bottom: 20px;
+        line-height: 1.6;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 12px 30px;
+        background-color: #3498db;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px;
+      }
+
+      .btn:hover {
+        background-color: #2980b9;
+      }
+
+      footer {
+        background-color: rgba(44, 62, 80, 0.95);
+        color: white;
+        text-align: center;
+        padding: 20px;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 60px;
+        "
+      >
+        <img
+          src="/public/images/logo.png"
+          alt="Fotherbys Auction Houses"
+          style="height: 50px; width: auto"
+        />
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="error-box">
+        <div class="error-icon">🔒</div>
+        <h2>Invalid Access Code</h2>
+        <p>
+          The QR code or access code you provided is invalid or no longer
+          available.
+        </p>
+        <p style="font-size: 14px">
+          Please check the code and try again, or contact support if you believe
+          this is an error.
+        </p>
+        <a href="/" class="btn">← Back to Home</a>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 Fotherbys Auction House. All rights reserved.</p>
+    </footer>
+  </body>
+</html>

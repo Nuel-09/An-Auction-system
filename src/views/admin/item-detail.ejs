@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/public/css/dashboard.css" />
+    <style>
+      .detail-container {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+      .detail-row {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 20px;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+      }
+      .detail-label {
+        font-weight: bold;
+        color: #34495e;
+      }
+      .detail-value {
+        color: #555;
+      }
+      .btn-primary {
+        background-color: #3498db;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .btn-primary:hover {
+        background-color: #2980b9;
+      }
+      .btn-back {
+        background-color: #95a5a6;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        margin-bottom: 20px;
+      }
+      .status-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-weight: bold;
+        color: white;
+      }
+      .status-draft {
+        background-color: #ecf0f1;
+        color: #34495e;
+      }
+      .status-published {
+        background-color: #27ae60;
+      }
+      .btn-success {
+        background-color: #27ae60;
+        color: white;
+      }
+      .btn-success:hover {
+        background-color: #229954;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="logo">
+        <h2>Fotherbys</h2>
+      </div>
+      <nav class="menu">
+        <a href="/admin/leads" class="menu-item">Seller Leads</a>
+        <a href="/admin/items" class="menu-item">Items</a>
+        <a href="/admin/auctions" class="menu-item">Auctions</a>
+        <a href="/admin/catalogue-preview" class="menu-item"
+          >📋 Catalogue Preview</a
+        >
+        <a href="/admin/dashboard" class="menu-item">Dashboard</a>
+      </nav>
+      <div class="logout-section">
+        <form method="POST" action="/admin/logout" style="width: 100%">
+          <button type="submit" class="logout-btn">Logout</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <header class="top-bar">
+        <div class="header-content">
+          <h1><%= title %></h1>
+          <div class="user-info">
+            Logged in as: <strong><%= admin?.email %></strong>
+          </div>
+        </div>
+      </header>
+
+      <div class="content">
+        <a href="/admin/items" class="btn-back">← Back to Items</a>
+
+        <div class="detail-container">
+          <h2><%= item.title %></h2>
+
+          <div class="detail-row">
+            <div class="detail-label">Status</div>
+            <div class="detail-value">
+              <span class="status-badge status-<%= item.status %>"
+                ><%= item.status %></span
+              >
+            </div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">Description</div>
+            <div class="detail-value"><%= item.description %></div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">Estimate</div>
+            <div class="detail-value">
+              £<%= item.estimateMin %> - £<%= item.estimateMax %>
+            </div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">Category</div>
+            <div class="detail-value"><%= item.category %></div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">Lot Reference</div>
+            <div class="detail-value">
+              <code
+                style="
+                  background-color: #f0f0f0;
+                  padding: 4px 8px;
+                  border-radius: 3px;
+                  font-family: monospace;
+                  font-size: 12px;
+                "
+              >
+                <%= item.lotRefNumber %>
+              </code>
+            </div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">Lot Number</div>
+            <div class="detail-value">
+              <% if (item.lotNumber) { %>
+              <span
+                style="
+                  background-color: #e8f4f8;
+                  padding: 4px 8px;
+                  border-radius: 3px;
+                  font-weight: bold;
+                  color: #2c3e50;
+                "
+              >
+                LOT <%= item.lotNumber %>
+              </span>
+              <% } else { %>
+              <span style="color: #95a5a6">Not assigned</span>
+              <% } %>
+            </div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">Auction</div>
+            <div class="detail-value">
+              <% if (item.auctionId) { %>
+              <a
+                href="/admin/auctions/<%= item.auctionId %>"
+                style="color: #3498db; text-decoration: none"
+                ><%= item.auctionId %></a
+              >
+              <% } else { %>
+              <span style="color: #7f8c8d">Not assigned</span>
+              <% } %>
+            </div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">Created</div>
+            <div class="detail-value">
+              <%= new Date(item.createdAt).toLocaleString() %>
+            </div>
+          </div>
+
+          <% if (item.status === 'draft') { %>
+          <div
+            style="
+              margin-top: 20px;
+              padding-top: 20px;
+              border-top: 1px solid #eee;
+            "
+          >
+            <button onclick="publishItem()" class="btn-primary btn-success">
+              Publish Item
+            </button>
+          </div>
+          <% } %>
+        </div>
+
+        <div class="detail-container">
+          <h3>Assign to Auction</h3>
+          <div style="margin-bottom: 15px">
+            <label>Select Auction:</label>
+            <select id="auctionSelect" style="width: 100%; padding: 8px">
+              <option value="">-- Select an auction --</option>
+            </select>
+          </div>
+          <button onclick="assignToAuction()" class="btn-primary">
+            Assign to Auction
+          </button>
+          <% if (item.auctionId) { %>
+          <button
+            onclick="unassignFromAuction()"
+            style="
+              margin-left: 10px;
+              padding: 10px 20px;
+              background: #e74c3c;
+              color: white;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+            "
+          >
+            Unassign
+          </button>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Load available auctions (only draft auctions can receive items)
+      async function loadAuctions() {
+        try {
+          const response = await fetch("/api/auctions");
+          const data = await response.json();
+
+          if (data.success && data.data.length > 0) {
+            const select = document.getElementById("auctionSelect");
+            // Filter to only show draft auctions
+            const draftAuctions = data.data.filter(
+              (auction) => auction.status === "draft"
+            );
+            draftAuctions.forEach((auction) => {
+              const option = document.createElement("option");
+              option.value = auction._id;
+              option.textContent = `${auction.title}`;
+              select.appendChild(option);
+            });
+
+            if (draftAuctions.length === 0) {
+              const option = document.createElement("option");
+              option.value = "";
+              option.textContent = "-- No draft auctions available --";
+              option.disabled = true;
+              select.appendChild(option);
+            }
+          }
+        } catch (error) {
+          console.error("Error loading auctions:", error);
+        }
+      }
+
+      async function publishItem() {
+        try {
+          const response = await fetch("/api/items/<%= item._id %>/publish", {
+            method: "POST",
+          });
+          if (response.ok) {
+            alert("Item published!");
+            location.reload();
+          } else {
+            alert("Failed to publish item");
+          }
+        } catch (error) {
+          alert("Error: " + error.message);
+        }
+      }
+
+      async function assignToAuction() {
+        const auctionId = document.getElementById("auctionSelect").value;
+        if (!auctionId) {
+          alert("Please select an auction");
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            `/api/auctions/${auctionId}/items/<%= item._id %>`,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({}),
+            }
+          );
+
+          const data = await response.json();
+
+          if (response.ok) {
+            alert("Item assigned to auction!");
+            location.reload();
+          } else {
+            console.error("Assignment failed:", data);
+            alert("Failed to assign item: " + (data.error || "Unknown error"));
+          }
+        } catch (error) {
+          console.error("Assignment error:", error);
+          alert("Error: " + error.message);
+        }
+      }
+
+      async function unassignFromAuction() {
+        try {
+          const response = await fetch(
+            `/api/auctions/<%= item.auctionId %>/items/<%= item._id %>`,
+            {
+              method: "DELETE",
+            }
+          );
+
+          if (response.ok) {
+            alert("Item unassigned!");
+            location.reload();
+          } else {
+            alert("Failed to unassign item");
+          }
+        } catch (error) {
+          alert("Error: " + error.message);
+        }
+      }
+
+      // Load auctions on page load
+      loadAuctions();
+    </script>
+  </body>
+</html>

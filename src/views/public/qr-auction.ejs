@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+      }
+
+      header {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: white;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .header-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 24px;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      nav a {
+        color: white;
+        text-decoration: none;
+        margin-left: 30px;
+      }
+
+      nav a:hover {
+        opacity: 0.8;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+
+      .auction-header {
+        background: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 40px;
+      }
+
+      .auction-header h1 {
+        color: #2c3e50;
+        margin-bottom: 15px;
+        font-size: 32px;
+      }
+
+      .auction-meta {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      .meta-item {
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 4px;
+        border-left: 4px solid #3498db;
+      }
+
+      .meta-label {
+        font-size: 12px;
+        color: #7f8c8d;
+        text-transform: uppercase;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .meta-value {
+        color: #2c3e50;
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .items-section {
+        margin-top: 40px;
+      }
+
+      .items-section h2 {
+        color: #2c3e50;
+        margin-bottom: 30px;
+        font-size: 28px;
+      }
+
+      .items-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 30px;
+      }
+
+      .item-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .item-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .item-header {
+        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        color: white;
+        padding: 15px;
+        min-height: 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .item-header h3 {
+        font-size: 16px;
+        margin: 0 0 5px 0;
+        font-weight: 600;
+      }
+
+      .item-header-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11px;
+        opacity: 0.9;
+      }
+
+      .item-category {
+        font-size: 11px;
+        opacity: 0.85;
+      }
+
+      .lot-number {
+        font-size: 11px;
+        font-weight: bold;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 2px 6px;
+        border-radius: 3px;
+      }
+
+      .item-body {
+        padding: 15px;
+      }
+
+      .item-description {
+        color: #555;
+        font-size: 12px;
+        line-height: 1.5;
+        margin-bottom: 12px;
+      }
+
+      .lot-details {
+        background-color: #f9f9f9;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 12px;
+        font-size: 12px;
+      }
+
+      .lot-detail-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 6px;
+      }
+
+      .lot-detail-item {
+        padding: 4px 0;
+        border-bottom: 1px solid #e9e9e9;
+      }
+
+      .lot-detail-item:last-child {
+        border-bottom: none;
+      }
+
+      .detail-label {
+        font-size: 10px;
+        color: #7f8c8d;
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+
+      .detail-value {
+        color: #2c3e50;
+        font-size: 12px;
+        font-weight: 500;
+        margin-top: 2px;
+      }
+
+      .item-estimate {
+        background-color: #fff9e6;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 12px;
+        border-left: 3px solid #f39c12;
+      }
+
+      .estimate-range {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .estimate-box {
+        flex: 1;
+        text-align: center;
+      }
+
+      .estimate-label {
+        font-size: 10px;
+        color: #7f8c8d;
+        text-transform: uppercase;
+        margin-bottom: 3px;
+      }
+
+      .estimate-value {
+        font-size: 14px;
+        font-weight: bold;
+        color: #e74c3c;
+      }
+
+      .auction-type {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+
+      .type-online {
+        background-color: #d5f4e6;
+        color: #27ae60;
+      }
+
+      .type-physical {
+        background-color: #ffd6d6;
+        color: #c0392b;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 8px;
+        color: #7f8c8d;
+      }
+
+      footer {
+        background-color: #2c3e50;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        margin-top: 60px;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-content">
+        <a
+          href="/"
+          class="logo"
+          style="display: flex; align-items: center; text-decoration: none"
+        >
+          <img
+            src="/public/images/logo.png"
+            alt="Fotherbys Auction Houses"
+            style="height: 40px; width: auto"
+          />
+        </a>
+        <nav>
+          <a href="/">Home</a>
+        </nav>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="auction-header">
+        <h1><%= auction.title %></h1>
+        <p style="color: #7f8c8d; margin-bottom: 20px">
+          <%= auction.description %>
+        </p>
+
+        <div class="auction-meta">
+          <div class="meta-item">
+            <div class="meta-label">Auction Type</div>
+            <div class="meta-value">
+              <% if (auction.auctionType === 'online') { %> 🌐 Online Auction <%
+              } else { %> 📍 Physical Auction <% } %>
+            </div>
+          </div>
+
+          <% if (auction.location) { %>
+          <div class="meta-item">
+            <div class="meta-label">Location</div>
+            <div class="meta-value"><%= auction.location %></div>
+          </div>
+          <% } %>
+
+          <div class="meta-item">
+            <div class="meta-label">Start Date</div>
+            <div class="meta-value">
+              <%= new Date(auction.startDate).toLocaleDateString('en-GB', {
+              weekday: 'short', year: 'numeric', month: 'short', day: 'numeric',
+              hour: '2-digit', minute: '2-digit' }) %>
+            </div>
+          </div>
+
+          <div class="meta-item">
+            <div class="meta-label">End Date</div>
+            <div class="meta-value">
+              <%= new Date(auction.endDate).toLocaleDateString('en-GB', {
+              weekday: 'short', year: 'numeric', month: 'short', day: 'numeric',
+              hour: '2-digit', minute: '2-digit' }) %>
+            </div>
+          </div>
+
+          <div class="meta-item">
+            <div class="meta-label">Status</div>
+            <div class="meta-value">
+              <% if (auction.status === 'draft') { %> 📋 Draft <% } else if
+              (auction.status === 'published') { %> ✓ Published <% } else if
+              (auction.status === 'closed') { %> ✓ Closed <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="items-section">
+        <h2>📦 Items in This Auction</h2>
+
+        <% if (items && items.length > 0) { %>
+        <div class="items-grid">
+          <% items.forEach((item, index) => { %>
+          <div class="item-card">
+            <div class="item-header">
+              <div>
+                <h3><%= item.title %></h3>
+                <div class="item-header-meta">
+                  <span class="item-category"><%= item.category %></span>
+                  <% if (item.lotNumber) { %>
+                  <span class="lot-number">LOT <%= item.lotNumber %></span>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+
+            <div class="item-body">
+              <p class="item-description"><%= item.description %></p>
+
+              <% if (item.artist || item.periodDate || item.dimensions ||
+              item.condition || item.auctionSession) { %>
+              <div class="lot-details">
+                <% if (item.artist) { %>
+                <div class="lot-detail-item">
+                  <div class="detail-label">Artist / Maker</div>
+                  <div class="detail-value"><%= item.artist %></div>
+                </div>
+                <% } %> <% if (item.periodDate) { %>
+                <div class="lot-detail-item">
+                  <div class="detail-label">Period / Date</div>
+                  <div class="detail-value"><%= item.periodDate %></div>
+                </div>
+                <% } %> <% if (item.dimensions) { %>
+                <div class="lot-detail-item">
+                  <div class="detail-label">Dimensions</div>
+                  <div class="detail-value"><%= item.dimensions %></div>
+                </div>
+                <% } %> <% if (item.condition) { %>
+                <div class="lot-detail-item">
+                  <div class="detail-label">Condition</div>
+                  <div class="detail-value"><%= item.condition %></div>
+                </div>
+                <% } %> <% if (item.auctionSession) { %>
+                <div class="lot-detail-item">
+                  <div class="detail-label">Session</div>
+                  <div class="detail-value" style="text-transform: capitalize">
+                    <%= item.auctionSession %>
+                  </div>
+                </div>
+                <% } %>
+              </div>
+              <% } %>
+
+              <div class="item-estimate">
+                <div class="estimate-range">
+                  <div class="estimate-box">
+                    <div class="estimate-label">Estimate Min</div>
+                    <div class="estimate-value">
+                      £<%= item.estimateMin.toLocaleString() %>
+                    </div>
+                  </div>
+                  <div class="estimate-box">
+                    <div class="estimate-label">Estimate Max</div>
+                    <div class="estimate-value">
+                      £<%= item.estimateMax.toLocaleString() %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <span
+                  class="auction-type <% if (item.auctionType === 'online') { %>type-online<% } else { %>type-physical<% } %>"
+                >
+                  <% if (item.auctionType === 'online') { %> 🌐 Online <% } else
+                  { %> 📍 Physical <% } %>
+                </span>
+              </div>
+            </div>
+          </div>
+          <% }); %>
+        </div>
+        <% } else { %>
+        <div class="empty-state">
+          <h3>No Items Yet</h3>
+          <p>This auction doesn't have any items yet.</p>
+        </div>
+        <% } %>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 Fotherbys Auction House. All rights reserved.</p>
+    </footer>
+  </body>
+</html>

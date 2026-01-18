@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+ <link rel="stylesheet" href="/public/css/login.css">
+</head>
+<body>
+  <div class="login-container">
+    <h1>Admin Login</h1>
+    
+    <form id="loginForm" method="POST" action="/admin/login">
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          required
+          placeholder="admin@fotherbys.com"
+        >
+      </div>
+      
+      <div class="form-group">
+        <div class="password-wrapper">
+          <label for="password">Password:</label>
+          <button type="button" id="togglePassword" class="toggle-password-btn">Show</button>
+        </div>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          required
+          placeholder="Enter your password"
+        >
+      </div>
+      
+      <button type="submit">Login</button>
+    </form>
+    
+    <div class="error-message" id="errorMessage"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const errorDiv = document.getElementById('errorMessage');
+    const togglePasswordBtn = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    
+    // Toggle password visibility
+    togglePasswordBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        togglePasswordBtn.textContent = 'Hide';
+      } else {
+        passwordInput.type = 'password';
+        togglePasswordBtn.textContent = 'Show';
+      }
+    });
+    
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      try {
+        const response = await fetch('/admin/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          // Redirect to admin dashboard (we'll create this later)
+          window.location.href = '/admin/dashboard';
+        } else {
+          errorDiv.textContent = data.error || 'Login failed';
+          errorDiv.classList.add('show');
+        }
+      } catch (error) {
+        errorDiv.textContent = 'An error occurred. Please try again.';
+        errorDiv.classList.add('show');
+      }
+    });
+  </script>
+</body>
+</html>

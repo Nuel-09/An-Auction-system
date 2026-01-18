@@ -1,0 +1,130 @@
+{
+  "testSellers": [
+    {
+      "name": "John Smithson",
+      "email": "john.smithson@antiques.com",
+      "phone": "+44 20 7946 0123",
+      "companyName": "Smithson Antiques Ltd",
+      "itemDetails": "Rare manuscript collection - 18th century botanical illustrations, leather-bound ledgers, handwritten correspondence from notable botanists",
+      "status": "draft",
+      "sampleItems": [
+        {
+          "title": "18th Century Botanical Manuscript Collection",
+          "description": "Complete set of hand-illustrated botanical drawings with Latin annotations. Includes pressed plant specimens. Period: 1780-1795. Exceptional condition with original leather bindings.",
+          "estimateMin": 4500,
+          "estimateMax": 7000,
+          "category": "Books",
+          "auctionType": "online",
+          "artist": "Unknown botanist illustrator",
+          "periodDate": "1780-1795",
+          "dimensions": "28cm x 22cm, 12 volumes",
+          "condition": "Very good, original leather bindings intact, minor foxing"
+        },
+        {
+          "title": "Handwritten Botanical Correspondence",
+          "description": "Collection of letters discussing rare plant species. From notable 18th century naturalists. Includes envelope seals and wax impressions.",
+          "estimateMin": 2800,
+          "estimateMax": 4500,
+          "category": "Books",
+          "auctionType": "online",
+          "artist": "Various 18th century botanists",
+          "periodDate": "1770-1800",
+          "dimensions": "20cm x 15cm, 45 pages in archival folder",
+          "condition": "Good, some water staining on edges, text legible"
+        }
+      ]
+    },
+    {
+      "name": "Victoria Ashworth",
+      "email": "victoria.ashworth@silverware.co.uk",
+      "phone": "+44 207 584 8424",
+      "companyName": "Ashworth Fine Silverware",
+      "itemDetails": "Victorian and Edwardian sterling silver cutlery sets, tea services, candlesticks, serving pieces - mostly hallmarked London silversmiths including Mappin & Webb and William Hutton",
+      "status": "draft",
+      "sampleItems": [
+        {
+          "title": "Victorian Sterling Silver Tea Service - 5 Piece",
+          "description": "Complete tea service including teapot, coffeepot, sugar bowl, creamer, and hot water jug. All pieces hallmarked London 1895. Elaborate floral engraving throughout. Excellent working condition.",
+          "estimateMin": 3200,
+          "estimateMax": 5000,
+          "category": "Silverware",
+          "auctionType": "online",
+          "artist": "William Hutton & Sons Ltd",
+          "periodDate": "1895",
+          "dimensions": "Teapot 22cm H, total weight approximately 2.8kg",
+          "condition": "Excellent, professionally polished, minor surface scratches consistent with age"
+        },
+        {
+          "title": "Set of 12 Edwardian Silver Dinner Forks",
+          "description": "Complete place setting of dinner forks. All hallmarked Sheffield 1906. Decorative thread and shell pattern. Perfect for formal dining. Well maintained.",
+          "estimateMin": 1800,
+          "estimateMax": 2800,
+          "category": "Silverware",
+          "auctionType": "online",
+          "artist": "Mappin & Webb",
+          "periodDate": "1906",
+          "dimensions": "20cm length (each), total weight 1.2kg",
+          "condition": "Very good, minimal wear, all tines perfect"
+        },
+        {
+          "title": "Pair of Georgian Silver Candlesticks",
+          "description": "Tall silver candlesticks with weighted bases. Hallmarked London 1810. Elegant fluted columns with acanthus leaf capitals. Original bobeches intact.",
+          "estimateMin": 2200,
+          "estimateMax": 3600,
+          "category": "Silverware",
+          "auctionType": "online",
+          "artist": "London silversmith (marks worn)",
+          "periodDate": "1810",
+          "dimensions": "28cm height (each), 8cm diameter base",
+          "condition": "Good, minor denting to bases, bobeches functional, patina consistent with age"
+        }
+      ]
+    },
+    {
+      "name": "Dr. Marcus Chen",
+      "email": "marcus.chen@manuscripts.org",
+      "phone": "+44 131 226 3362",
+      "companyName": "Chen Rare Manuscripts Archive",
+      "itemDetails": "Early printed books, incunabula, medieval manuscripts on vellum, Renaissance-era religious texts, some with hand-coloured illustrations and gold leaf decoration. Includes several items with provenance documentation.",
+      "status": "submitted",
+      "sampleItems": [
+        {
+          "title": "Incunabula - Gutenberg Era Printed Book 1470s",
+          "description": "Rare early printed book from the incunabula period. Hand-coloured woodcut illustrations with original gold leaf highlighting. Latin text. Bound in contemporary calf leather with brass clasps. Museum documentation included.",
+          "estimateMin": 18000,
+          "estimateMax": 28000,
+          "category": "Books",
+          "auctionType": "physical",
+          "artist": "Anonymous 15th century printer",
+          "periodDate": "1475",
+          "dimensions": "32cm x 21cm, 240 leaves on vellum",
+          "condition": "Very good for age, original binding intact with minor wear, one leaf professionally repaired"
+        },
+        {
+          "title": "Medieval Vellum Manuscript - Book of Hours",
+          "description": "Exquisite illuminated manuscript on vellum. Book of Hours with miniature paintings by skilled medieval artist. Gold and lapis lazuli throughout. Calendar pages and liturgical texts. 14th century French work.",
+          "estimateMin": 25000,
+          "estimateMax": 40000,
+          "category": "Books",
+          "auctionType": "physical",
+          "artist": "Medieval French scribe and illuminator",
+          "periodDate": "1350-1380",
+          "dimensions": "22cm x 16cm, 128 vellum pages",
+          "condition": "Excellent, original gold leaf intact, colours vibrant, modern conservation binding"
+        },
+        {
+          "title": "Renaissance Religious Text - Hand-Coloured Edition",
+          "description": "Rare Renaissance theological commentary with hand-coloured engravings. Latin and Italian text. Published Venice 1520. Contemporary leather binding with raised bands. Includes hand-annotated margins by previous scholar owner.",
+          "estimateMin": 5500,
+          "estimateMax": 8500,
+          "category": "Books",
+          "auctionType": "online",
+          "artist": "Venetian printer and illuminator",
+          "periodDate": "1520",
+          "dimensions": "28cm x 18cm, 350 pages",
+          "condition": "Good, binding secure, hand-coloration intact, scholar's annotations in period ink"
+        }
+      ]
+    }
+  ]
+}

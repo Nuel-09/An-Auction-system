@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/public/css/dashboard.css" />
+    <style>
+      .content-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .btn-primary {
+        background-color: #3498db;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .btn-primary:hover {
+        background-color: #2980b9;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+      th {
+        background-color: #f5f5f5;
+        font-weight: bold;
+        color: #333;
+      }
+      tr:hover {
+        background-color: #f9f9f9;
+      }
+      .actions {
+        display: flex;
+        gap: 10px;
+      }
+      .btn-small {
+        padding: 6px 12px;
+        font-size: 12px;
+        text-decoration: none;
+        border-radius: 3px;
+        cursor: pointer;
+        border: none;
+      }
+      .btn-view {
+        background-color: #3498db;
+        color: white;
+      }
+      .btn-edit {
+        background-color: #f39c12;
+        color: white;
+      }
+      .btn-delete {
+        background-color: #e74c3c;
+        color: white;
+      }
+      .status-badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 3px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .status-draft {
+        background-color: #ecf0f1;
+        color: #34495e;
+      }
+      .status-published {
+        background-color: #27ae60;
+        color: white;
+      }
+      .createForm {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="logo">
+        <h2>Fotherbys</h2>
+      </div>
+      <nav class="menu">
+        <a href="/admin/leads" class="menu-item">Seller Leads</a>
+        <a href="/admin/items" class="menu-item">Items</a>
+        <a href="/admin/auctions" class="menu-item">Auctions</a>
+        <a href="/admin/catalogue-preview" class="menu-item"
+          >📋 Catalogue Preview</a
+        >
+        <a href="/admin/dashboard" class="menu-item">Dashboard</a>
+      </nav>
+      <div class="logout-section">
+        <form method="POST" action="/admin/logout" style="width: 100%">
+          <button type="submit" class="logout-btn">Logout</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <header class="top-bar">
+        <div class="header-content">
+          <h1><%= title %></h1>
+          <div class="user-info">
+            Logged in as: <strong><%= admin?.email %></strong>
+          </div>
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="content-header">
+          <h2>All Items</h2>
+          <button onclick="showCreateForm()" class="btn-primary">
+            + New Item
+          </button>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div
+          style="
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+          "
+        >
+          <div style="display: flex; gap: 10px; margin-bottom: 15px">
+            <input
+              type="text"
+              id="searchCategory"
+              placeholder="Search items by category"
+              style="
+                flex: 1;
+                padding: 8px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+              "
+              onkeyup="onSearchChange()"
+            />
+            <button onclick="searchItems()" class="btn-primary">Search</button>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center">
+            <label style="min-width: 80px">Filter by date:</label>
+            <input
+              type="date"
+              id="filterFromDate"
+              style="padding: 8px; border: 1px solid #ddd; border-radius: 4px"
+            />
+            <span>to</span>
+            <input
+              type="date"
+              id="filterToDate"
+              style="padding: 8px; border: 1px solid #ddd; border-radius: 4px"
+            />
+            <button onclick="applyDateFilter()" class="btn-primary">
+              Filter
+            </button>
+            <button
+              onclick="clearFilters()"
+              style="
+                padding: 8px 15px;
+                background: #95a5a6;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+              "
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+
+        <!-- Search Results Display -->
+        <div
+          id="searchResults"
+          style="
+            display: none;
+            background: #f0f0f0;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            max-height: 300px;
+            overflow-y: auto;
+          "
+        ></div>
+
+        <div id="createForm" class="createForm" style="display: none">
+          <h3>Create New Item</h3>
+          <form id="itemForm">
+            <div style="margin-bottom: 15px">
+              <label>Title:</label>
+              <input
+                type="text"
+                id="title"
+                required
+                style="width: 100%; padding: 8px"
+              />
+            </div>
+            <div style="margin-bottom: 15px">
+              <label>Description:</label>
+              <textarea
+                id="description"
+                required
+                style="width: 100%; padding: 8px; height: 80px"
+              ></textarea>
+            </div>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+                margin-bottom: 15px;
+              "
+            >
+              <div>
+                <label>Min Estimate (£):</label>
+                <input
+                  type="number"
+                  id="estimateMin"
+                  required
+                  style="width: 100%; padding: 8px"
+                />
+              </div>
+              <div>
+                <label>Max Estimate (£):</label>
+                <input
+                  type="number"
+                  id="estimateMax"
+                  required
+                  style="width: 100%; padding: 8px"
+                />
+              </div>
+            </div>
+            <div style="margin-bottom: 15px">
+              <label>Category:</label>
+              <input
+                type="text"
+                id="category"
+                placeholder="e.g. Furniture"
+                style="width: 100%; padding: 8px"
+              />
+            </div>
+            <button type="submit" class="btn-primary">Create Item</button>
+            <button
+              type="button"
+              onclick="hideCreateForm()"
+              style="
+                margin-left: 10px;
+                padding: 10px 20px;
+                background: #95a5a6;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+              "
+            >
+              Cancel
+            </button>
+          </form>
+        </div>
+
+        <% if (items && items.length > 0) { %>
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Estimate</th>
+              <th>Category</th>
+              <th>Lot Reference</th>
+              <th>Lot Number</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% items.forEach(item => { %>
+            <tr>
+              <td><%= item.title %></td>
+              <td><%= item.description.substring(0, 50) %>...</td>
+              <td>£<%= item.estimateMin %> - £<%= item.estimateMax %></td>
+              <td><%= item.category %></td>
+              <td>
+                <code
+                  style="
+                    background-color: #f0f0f0;
+                    padding: 4px 8px;
+                    border-radius: 3px;
+                    font-family: monospace;
+                    font-size: 11px;
+                  "
+                >
+                  <%= item.lotRefNumber %>
+                </code>
+              </td>
+              <td>
+                <% if (item.lotNumber) { %>
+                <span
+                  style="
+                    background-color: #e8f4f8;
+                    padding: 4px 8px;
+                    border-radius: 3px;
+                    font-weight: bold;
+                    color: #2c3e50;
+                  "
+                >
+                  LOT <%= item.lotNumber %>
+                </span>
+                <% } else { %>
+                <span style="color: #95a5a6">-</span>
+                <% } %>
+              </td>
+              <td>
+                <span class="status-badge status-<%= item.status %>">
+                  <%= item.status %>
+                </span>
+              </td>
+              <td>
+                <div class="actions">
+                  <a
+                    href="/admin/items/<%= item._id %>"
+                    class="btn-small btn-view"
+                    >View</a
+                  >
+                  <% if (item.status === 'draft') { %>
+                  <button
+                    onclick="publishItemQuick('<%= item._id %>')"
+                    class="btn-small"
+                    style="background-color: #27ae60; color: white"
+                  >
+                    Publish
+                  </button>
+                  <% } %>
+                  <button
+                    onclick="deleteItem('<%= item._id %>')"
+                    class="btn-small btn-delete"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+        <% } else { %>
+        <p style="text-align: center; color: #7f8c8d; padding: 40px">
+          No items yet. Create one to get started.
+        </p>
+        <% } %>
+      </div>
+    </div>
+
+    <script>
+      let searchTimeout;
+
+      function onSearchChange() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(performSearch, 300);
+      }
+
+      async function performSearch() {
+        const category = document.getElementById("searchCategory").value.trim();
+        if (!category) {
+          document.getElementById("searchResults").style.display = "none";
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            `/api/items/search?category=${encodeURIComponent(category)}`
+          );
+          const data = await response.json();
+
+          if (data.success && data.data.length > 0) {
+            const resultsDiv = document.getElementById("searchResults");
+            resultsDiv.innerHTML = data.data
+              .map(
+                (item) => `
+              <div style="padding: 8px; cursor: pointer; hover: background: #e0e0e0;" onclick="selectItem('${item._id}')">
+                ${item.title} - ${item.category}
+              </div>
+            `
+              )
+              .join("");
+            resultsDiv.style.display = "block";
+          } else {
+            document.getElementById("searchResults").style.display = "none";
+          }
+        } catch (error) {
+          console.error("Search error:", error);
+        }
+      }
+
+      function selectItem(itemId) {
+        window.location.href = `/admin/items/${itemId}`;
+      }
+
+      function searchItems() {
+        performSearch();
+      }
+
+      async function applyDateFilter() {
+        const fromDate = document.getElementById("filterFromDate").value;
+        const toDate = document.getElementById("filterToDate").value;
+
+        let url = "/admin/items";
+        if (fromDate || toDate) {
+          const params = new URLSearchParams();
+          if (fromDate) params.append("fromDate", fromDate);
+          if (toDate) params.append("toDate", toDate);
+          url += `?${params.toString()}`;
+        }
+        window.location.href = url;
+      }
+
+      function clearFilters() {
+        document.getElementById("filterFromDate").value = "";
+        document.getElementById("filterToDate").value = "";
+        document.getElementById("searchCategory").value = "";
+        document.getElementById("searchResults").style.display = "none";
+        window.location.href = "/admin/items";
+      }
+
+      function showCreateForm() {
+        document.getElementById("createForm").style.display = "block";
+      }
+
+      function hideCreateForm() {
+        document.getElementById("createForm").style.display = "none";
+        document.getElementById("itemForm").reset();
+      }
+
+      document
+        .getElementById("itemForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const itemData = {
+            title: document.getElementById("title").value,
+            description: document.getElementById("description").value,
+            estimateMin: parseInt(document.getElementById("estimateMin").value),
+            estimateMax: parseInt(document.getElementById("estimateMax").value),
+            category:
+              document.getElementById("category").value || "Uncategorized",
+          };
+
+          try {
+            const response = await fetch("/api/items", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(itemData),
+            });
+
+            if (response.ok) {
+              alert("Item created successfully!");
+              location.reload();
+            } else {
+              alert("Failed to create item");
+            }
+          } catch (error) {
+            alert("Error: " + error.message);
+          }
+        });
+
+      async function publishItemQuick(itemId) {
+        try {
+          const response = await fetch(`/api/items/${itemId}/publish`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+          });
+          if (response.ok) {
+            alert("Item published successfully!");
+            location.reload();
+          } else {
+            alert("Failed to publish item");
+          }
+        } catch (error) {
+          alert("Error: " + error.message);
+        }
+      }
+
+      async function deleteItem(itemId) {
+        if (!confirm("Are you sure?")) return;
+
+        try {
+          const response = await fetch(`/api/items/${itemId}`, {
+            method: "DELETE",
+          });
+          if (response.ok) {
+            alert("Item deleted");
+            location.reload();
+          } else {
+            alert("Failed to delete item");
+          }
+        } catch (error) {
+          alert("Error: " + error.message);
+        }
+      }
+    </script>
+  </body>
+</html>

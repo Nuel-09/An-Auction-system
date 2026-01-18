@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/public/css/dashboard.css" />
+    <style>
+      .content-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .btn-primary {
+        background-color: #3498db;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .btn-primary:hover {
+        background-color: #2980b9;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+      th {
+        background-color: #f5f5f5;
+        font-weight: bold;
+        color: #333;
+      }
+      tr:hover {
+        background-color: #f9f9f9;
+      }
+      .actions {
+        display: flex;
+        gap: 10px;
+      }
+      .btn-small {
+        padding: 6px 12px;
+        font-size: 12px;
+        text-decoration: none;
+        border-radius: 3px;
+        cursor: pointer;
+        border: none;
+      }
+      .btn-view {
+        background-color: #3498db;
+        color: white;
+      }
+      .btn-edit {
+        background-color: #f39c12;
+        color: white;
+      }
+      .btn-delete {
+        background-color: #e74c3c;
+        color: white;
+      }
+      .status-badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 3px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .status-draft {
+        background-color: #ecf0f1;
+        color: #34495e;
+      }
+      .status-submitted {
+        background-color: #3498db;
+        color: white;
+      }
+      .status-locked {
+        background-color: #e74c3c;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="logo">
+        <h2>Fotherbys</h2>
+      </div>
+      <nav class="menu">
+        <a href="/admin/leads" class="menu-item">Seller Leads</a>
+        <a href="/admin/items" class="menu-item">Items</a>
+        <a href="/admin/auctions" class="menu-item">Auctions</a>
+        <a href="/admin/dashboard" class="menu-item">Dashboard</a>
+      </nav>
+      <div class="logout-section">
+        <form method="POST" action="/admin/logout" style="width: 100%">
+          <button type="submit" class="logout-btn">Logout</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <header class="top-bar">
+        <div class="header-content">
+          <h1><%= title %></h1>
+          <div class="user-info">
+            Logged in as: <strong><%= admin?.email %></strong>
+          </div>
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="content-header">
+          <h2>All Seller Leads</h2>
+          <button onclick="showCreateForm()" class="btn-primary">
+            + New Lead
+          </button>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div
+          style="
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+          "
+        >
+          <div style="display: flex; gap: 10px; margin-bottom: 15px">
+            <input
+              type="text"
+              id="searchEmail"
+              placeholder="Search leads with email"
+              style="
+                flex: 1;
+                padding: 8px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+              "
+              onkeyup="onSearchChange()"
+            />
+            <button onclick="searchLeads()" class="btn-primary">Search</button>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center">
+            <label style="min-width: 80px">Filter by date:</label>
+            <input
+              type="date"
+              id="filterFromDate"
+              style="padding: 8px; border: 1px solid #ddd; border-radius: 4px"
+            />
+            <span>to</span>
+            <input
+              type="date"
+              id="filterToDate"
+              style="padding: 8px; border: 1px solid #ddd; border-radius: 4px"
+            />
+            <button onclick="applyDateFilter()" class="btn-primary">
+              Filter
+            </button>
+            <button
+              onclick="clearFilters()"
+              style="
+                padding: 8px 15px;
+                background: #95a5a6;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+              "
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+
+        <!-- Search Results Display -->
+        <div
+          id="searchResults"
+          style="
+            display: none;
+            background: #f0f0f0;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            max-height: 300px;
+            overflow-y: auto;
+          "
+        ></div>
+
+        <div
+          id="createForm"
+          style="
+            display: none;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+          "
+        >
+          <h3>Create New Seller Lead</h3>
+          <form id="leadForm">
+            <div style="margin-bottom: 15px">
+              <label>Name:</label>
+              <input
+                type="text"
+                id="name"
+                required
+                style="width: 100%; padding: 8px"
+              />
+            </div>
+            <div style="margin-bottom: 15px">
+              <label>Email:</label>
+              <input
+                type="email"
+                id="email"
+                required
+                style="width: 100%; padding: 8px"
+              />
+            </div>
+            <div style="margin-bottom: 15px">
+              <label>Phone:</label>
+              <input
+                type="tel"
+                id="phone"
+                required
+                style="width: 100%; padding: 8px"
+              />
+            </div>
+            <div style="margin-bottom: 15px">
+              <label>Company Name:</label>
+              <input
+                type="text"
+                id="companyName"
+                required
+                style="width: 100%; padding: 8px"
+              />
+            </div>
+            <div style="margin-bottom: 15px">
+              <label>Item Details:</label>
+              <textarea
+                id="itemDetails"
+                required
+                style="width: 100%; padding: 8px; height: 100px"
+              ></textarea>
+            </div>
+            <button type="submit" class="btn-primary">Create Lead</button>
+            <button
+              type="button"
+              onclick="hideCreateForm()"
+              style="
+                margin-left: 10px;
+                padding: 10px 20px;
+                background: #95a5a6;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+              "
+            >
+              Cancel
+            </button>
+          </form>
+        </div>
+
+        <% if (leads && leads.length > 0) { %>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Company</th>
+              <th>Status</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% leads.forEach(lead => { %>
+            <tr>
+              <td><%= lead.name %></td>
+              <td><%= lead.email %></td>
+              <td><%= lead.phone %></td>
+              <td><%= lead.companyName %></td>
+              <td>
+                <span class="status-badge status-<%= lead.status %>">
+                  <%= lead.status %>
+                </span>
+              </td>
+              <td><%= new Date(lead.createdAt).toLocaleDateString() %></td>
+              <td>
+                <div class="actions">
+                  <a
+                    href="/admin/leads/<%= lead._id %>"
+                    class="btn-small btn-view"
+                    >View</a
+                  >
+                  <button
+                    onclick="deleteLead('<%= lead._id %>')"
+                    class="btn-small btn-delete"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+        <% } else { %>
+        <p style="text-align: center; color: #7f8c8d; padding: 40px">
+          No seller leads yet. Create one to get started.
+        </p>
+        <% } %>
+      </div>
+    </div>
+
+    <script>
+      let searchTimeout;
+
+      function onSearchChange() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(performSearch, 300);
+      }
+
+      async function performSearch() {
+        const email = document.getElementById("searchEmail").value.trim();
+        if (!email) {
+          document.getElementById("searchResults").style.display = "none";
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            `/api/leads/search?email=${encodeURIComponent(email)}`
+          );
+          const data = await response.json();
+
+          if (data.success && data.data.length > 0) {
+            const resultsDiv = document.getElementById("searchResults");
+            resultsDiv.innerHTML = data.data
+              .map(
+                (lead) => `
+              <div style="padding: 8px; cursor: pointer; hover: background: #e0e0e0;" onclick="selectLead('${lead._id}')">
+                ${lead.name} - ${lead.email}
+              </div>
+            `
+              )
+              .join("");
+            resultsDiv.style.display = "block";
+          } else {
+            document.getElementById("searchResults").style.display = "none";
+          }
+        } catch (error) {
+          console.error("Search error:", error);
+        }
+      }
+
+      function selectLead(leadId) {
+        window.location.href = `/admin/leads/${leadId}`;
+      }
+
+      function searchLeads() {
+        performSearch();
+      }
+
+      async function applyDateFilter() {
+        const fromDate = document.getElementById("filterFromDate").value;
+        const toDate = document.getElementById("filterToDate").value;
+
+        let url = "/admin/leads";
+        if (fromDate || toDate) {
+          const params = new URLSearchParams();
+          if (fromDate) params.append("fromDate", fromDate);
+          if (toDate) params.append("toDate", toDate);
+          url += `?${params.toString()}`;
+        }
+        window.location.href = url;
+      }
+
+      function clearFilters() {
+        document.getElementById("filterFromDate").value = "";
+        document.getElementById("filterToDate").value = "";
+        document.getElementById("searchEmail").value = "";
+        document.getElementById("searchResults").style.display = "none";
+        window.location.href = "/admin/leads";
+      }
+
+      function showCreateForm() {
+        document.getElementById("createForm").style.display = "block";
+      }
+
+      function hideCreateForm() {
+        document.getElementById("createForm").style.display = "none";
+        document.getElementById("leadForm").reset();
+      }
+
+      document
+        .getElementById("leadForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const leadData = {
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            phone: document.getElementById("phone").value,
+            companyName: document.getElementById("companyName").value,
+            itemDetails: document.getElementById("itemDetails").value,
+          };
+
+          try {
+            const response = await fetch("/api/leads", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(leadData),
+            });
+
+            if (response.ok) {
+              alert("Lead created successfully!");
+              location.reload();
+            } else {
+              alert("Failed to create lead");
+            }
+          } catch (error) {
+            alert("Error: " + error.message);
+          }
+        });
+
+      async function deleteLead(leadId) {
+        if (!confirm("Are you sure?")) return;
+
+        try {
+          const response = await fetch(`/api/leads/${leadId}`, {
+            method: "DELETE",
+          });
+          if (response.ok) {
+            alert("Lead deleted");
+            location.reload();
+          } else {
+            alert("Failed to delete lead");
+          }
+        } catch (error) {
+          alert("Error: " + error.message);
+        }
+      }
+    </script>
+  </body>
+</html>

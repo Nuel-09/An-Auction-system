@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/public/css/dashboard.css" />
+  </head>
+  <body>
+    <div class="sidebar">
+      <div
+        class="logo"
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px 0;
+        "
+      >
+        <img
+          src="/public/images/logo.png"
+          alt="Fotherbys Auction Houses"
+          style="height: 50px; width: auto"
+        />
+      </div>
+
+      <nav class="menu">
+        <a href="/admin/leads" class="menu-item">Seller Leads</a>
+        <a href="/admin/items" class="menu-item">Items</a>
+        <a href="/admin/auctions" class="menu-item">Auctions</a>
+        <a href="/admin/catalogue-preview" class="menu-item"
+          >📋 Catalogue Preview</a
+        >
+        <a href="/admin/profile" class="menu-item">Profile</a>
+      </nav>
+
+      <div class="logout-section">
+        <form id="logoutForm" style="width: 100%">
+          <button type="submit" class="logout-btn">Logout</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <header class="top-bar">
+        <div class="header-content">
+          <h1>Dashboard</h1>
+          <div class="user-info">
+            Logged in as: <strong><%= admin?.email %></strong>
+          </div>
+        </div>
+      </header>
+
+      <div class="content">
+        <h2>Welcome to Admin Panel</h2>
+        <p>Select an option from the sidebar to get started.</p>
+
+        <div class="quick-links">
+          <div class="card">
+            <h3>📋 Seller Leads</h3>
+            <p>View and manage seller inquiries</p>
+            <a href="/admin/leads" class="btn">View Leads</a>
+          </div>
+
+          <div class="card">
+            <h3>📦 Items</h3>
+            <p>Create and manage auction items</p>
+            <a href="/admin/items" class="btn">View Items</a>
+          </div>
+
+          <div class="card">
+            <h3>🏆 Auctions</h3>
+            <p>Create and publish auctions</p>
+            <a href="/admin/auctions" class="btn">View Auctions</a>
+          </div>
+
+          <div class="card">
+            <h3>📋 Catalogue Preview</h3>
+            <p>Preview and print published auctions with QR codes</p>
+            <a href="/admin/catalogue-preview" class="btn">View Catalogue</a>
+          </div>
+
+          <div class="card">
+            <h3>👤 Profile</h3>
+            <p>Manage your admin profile settings</p>
+            <a href="/admin/profile" class="btn">View Profile</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document
+        .getElementById("logoutForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          try {
+            const response = await fetch("/admin/logout", { method: "POST" });
+            const data = await response.json();
+
+            if (data.success) {
+              alert(data.data.message); // Show: "Logged out successfully"
+              window.location.href = "/admin/login"; // Redirect to login
+            } else {
+              alert("Logout failed");
+            }
+          } catch (error) {
+            alert("An error occurred during logout");
+          }
+        });
+    </script>
+  </body>
+</html>

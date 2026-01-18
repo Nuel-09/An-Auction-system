@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fotherbys - Premier Auction House</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
+        line-height: 1.6;
+      }
+
+      header {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: white;
+        padding: 20px 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .header-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        height: 50px;
+      }
+
+      .logo img {
+        height: 100%;
+        width: auto;
+      }
+
+      nav a {
+        color: white;
+        text-decoration: none;
+        margin-left: 30px;
+        transition: opacity 0.3s;
+      }
+
+      nav a:hover {
+        opacity: 0.8;
+      }
+
+      .hero {
+        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        color: white;
+        padding: 80px 20px;
+        text-align: center;
+      }
+
+      .hero h1 {
+        font-size: 48px;
+        margin-bottom: 20px;
+        letter-spacing: 1px;
+      }
+
+      .hero p {
+        font-size: 20px;
+        opacity: 0.95;
+        margin-bottom: 30px;
+      }
+
+      .cta-buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 15px 40px;
+        font-size: 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: transform 0.3s, box-shadow 0.3s;
+        display: inline-block;
+      }
+
+      .btn-primary {
+        background-color: #e74c3c;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(231, 76, 60, 0.3);
+      }
+
+      .btn-secondary {
+        background-color: white;
+        color: #2980b9;
+        font-weight: bold;
+      }
+
+      .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(255, 255, 255, 0.3);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 60px 20px;
+      }
+
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 40px;
+        margin-bottom: 80px;
+      }
+
+      .feature {
+        text-align: center;
+        padding: 30px;
+      }
+
+      .feature-icon {
+        font-size: 48px;
+        margin-bottom: 15px;
+      }
+
+      .feature h3 {
+        color: #2c3e50;
+        margin-bottom: 10px;
+        font-size: 22px;
+      }
+
+      .feature p {
+        color: #7f8c8d;
+      }
+
+      .seller-section {
+        background-color: #f5f5f5;
+        padding: 60px 20px;
+        margin-top: 40px;
+      }
+
+      .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-container h2 {
+        color: #2c3e50;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+
+      .disclaimer {
+        background-color: #fff3cd;
+        border: 1px solid #ffc107;
+        color: #856404;
+        padding: 15px;
+        border-radius: 4px;
+        margin-bottom: 25px;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #2c3e50;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #bdc3c7;
+        border-radius: 4px;
+        font-size: 14px;
+        font-family: inherit;
+        box-sizing: border-box;
+      }
+
+      input:focus,
+      textarea:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      .form-submit {
+        background-color: #3498db;
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+        width: 100%;
+      }
+
+      .form-submit:hover {
+        background-color: #2980b9;
+      }
+
+      .success-message {
+        display: none;
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+        padding: 15px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+      }
+
+      .error-message {
+        display: none;
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+        padding: 15px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+      }
+
+      footer {
+        background-color: #2c3e50;
+        color: white;
+        text-align: center;
+        padding: 40px 20px;
+        margin-top: 80px;
+      }
+
+      .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        margin-bottom: 30px;
+      }
+
+      .footer-section h4 {
+        margin-bottom: 15px;
+      }
+
+      .footer-section p,
+      .footer-section a {
+        color: #bdc3c7;
+        text-decoration: none;
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      .footer-section a:hover {
+        color: white;
+      }
+
+      .footer-bottom {
+        border-top: 1px solid #34495e;
+        padding-top: 20px;
+        color: #bdc3c7;
+      }
+
+      .logo-placeholder {
+        font-size: 40px;
+        margin-bottom: 20px;
+        display: inline-block;
+      }
+
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 32px;
+        }
+
+        .hero p {
+          font-size: 16px;
+        }
+
+        .cta-buttons {
+          flex-direction: column;
+        }
+
+        .btn {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-content">
+        <a href="/" class="logo">
+          <img
+            src="/public/images/logo.png"
+            alt="Fotherbys Auction Houses"
+            style="max-height: 50px; width: auto"
+          />
+        </a>
+        <nav>
+          <a href="#sell">Sell with Us</a>
+          <a href="/seller/my-items">My Items</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="hero">
+      <h1>Premier Auction House</h1>
+      <p>Sell your treasures to collectors worldwide</p>
+      <div class="cta-buttons">
+        <button
+          class="btn btn-primary"
+          onclick="document.getElementById('sell').scrollIntoView({behavior: 'smooth'})"
+        >
+          Start Selling
+        </button>
+        <button
+          class="btn btn-secondary"
+          onclick="document.getElementById('browse').scrollIntoView({behavior: 'smooth'})"
+        >
+          🔐 Browse Auctions
+        </button>
+      </div>
+    </section>
+
+    <!-- Published Auctions & Items Section -->
+    <section id="browse" style="background-color: #ecf0f1; padding: 60px 20px;">
+      <div class="container">
+        <h2 style="text-align: center; color: #2c3e50; margin-bottom: 50px; font-size: 36px;">
+          🔐 Private Auctions (Invitation Only)
+        </h2>
+        
+        <% if (publishedAuctions && publishedAuctions.length > 0) { %>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-bottom: 60px;">
+          <% publishedAuctions.forEach(auction => { %>
+            <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: transform 0.3s;">
+              <div style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); color: white; padding: 20px; height: 120px; display: flex; flex-direction: column; justify-content: center;">
+                <h3 style="margin: 0; font-size: 20px; margin-bottom: 8px;"><%= auction.title %></h3>
+                <p style="margin: 0; font-size: 13px; opacity: 0.9;"><%= auction.description.substring(0, 50) %>...</p>
+              </div>
+              <div style="padding: 20px;">
+                <div style="margin-bottom: 12px;">
+                  <strong style="color: #7f8c8d; font-size: 12px;">🔒 Private (QR Code Required)</strong>
+                </div>
+                <div style="font-size: 13px; color: #555; margin-bottom: 15px;">
+                  <strong>Starts:</strong> <%= new Date(auction.startDate).toLocaleDateString() %><br>
+                  <strong>Ends:</strong> <%= new Date(auction.endDate).toLocaleDateString() %>
+                </div>
+                <a href="javascript:void(0);" onclick="openQRModal('<%= auction._id %>', '<%= auction.title %>')" style="display: inline-block; background: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; font-size: 14px;">View Auction →</a>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+        <% } else { %>
+        <div style="text-align: center; color: #7f8c8d; padding: 40px;">
+          <p style="font-size: 16px;">No private auctions available at the moment.</p>
+        </div>
+        <% } %>
+      </div>
+    </section>
+
+    <!-- Published Items Section -->
+    <section style="padding: 60px 20px; background: white;">
+      <div class="container">
+        <h2 style="text-align: center; color: #2c3e50; margin-bottom: 50px; font-size: 36px;">
+          📦 Published Items
+        </h2>
+        
+        <% if (publishedItems && publishedItems.length > 0) { %>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px;">
+          <% publishedItems.forEach(item => { %>
+            <a href="/item/<%= item._id %>" style="text-decoration: none; color: inherit; transition: transform 0.3s;">
+              <div style="background: white; border: 1px solid #ecf0f1; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: box-shadow 0.3s, transform 0.3s; height: 100%;" onmouseover="this.style.boxShadow='0 5px 20px rgba(0,0,0,0.15)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.boxShadow='0 2px 10px rgba(0,0,0,0.05)'; this.style.transform='translateY(0)';">
+                <div style="background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%); height: 100px; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px;">
+                  <% if (item.auction) { %>
+                    <%= item.auction.title %>
+                  <% } else { %>
+                    Not Yet Assigned
+                  <% } %>
+                </div>
+                <div style="padding: 15px;">
+                  <h4 style="margin: 0 0 8px 0; font-size: 16px; color: #2c3e50;"><%= item.title %></h4>
+                  <p style="margin: 0 0 10px 0; font-size: 13px; color: #7f8c8d; line-height: 1.4;"><%= item.description.substring(0, 60) %>...</p>
+                  <div style="background: #f5f5f5; padding: 10px; border-radius: 4px; margin-bottom: 10px;">
+                    <strong style="color: #27ae60; font-size: 14px;">£<%= item.estimateMin %> - £<%= item.estimateMax %></strong>
+                  </div>
+                  <div style="display: flex; gap: 8px; font-size: 12px;">
+                    <span style="background: #ecf0f1; padding: 4px 8px; border-radius: 3px; color: #34495e;"><%= item.category || 'Uncategorized' %></span>
+                    <% if (item.auction && item.auctionStatus) { %>
+                      <span style="background: <% if (item.auctionStatus === 'active') { %>#{27ae60}<% } else { %>#e74c3c<% } %>; color: white; padding: 4px 8px; border-radius: 3px;"><%= item.auctionStatus %></span>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+            </a>
+          <% }); %>
+        </div>
+        <% } else { %>
+        <div style="text-align: center; color: #7f8c8d; padding: 40px;">
+          <p style="font-size: 16px;">No published items at the moment.</p>
+        </div>
+        <% } %>
+      </div>
+    </section>
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">⚡</div>
+          <h3>Fast & Easy</h3>
+          <p>Submit your items in minutes with our simple online form</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🌍</div>
+          <h3>Global Reach</h3>
+          <p>Your items reach collectors and bidders worldwide</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">💎</div>
+          <h3>Expert Evaluation</h3>
+          <p>Our specialists carefully review and price every item</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">📊</div>
+          <h3>Transparent Pricing</h3>
+          <p>Fair estimates and clear commission structures</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🔒</div>
+          <h3>Secure & Safe</h3>
+          <p>Professional handling and secure transaction process</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">📱</div>
+          <h3>Track Your Items</h3>
+          <p>Monitor your auction status anytime with your email</p>
+        </div>
+      </div>
+    </div>
+
+    <section class="seller-section" id="sell">
+      <div class="form-container">
+        <div class="logo-placeholder">📦</div>
+        <h2>Submit Your Items for Auction</h2>
+        <p style="text-align: center; color: #7f8c8d; margin-bottom: 20px">
+          Fill in your auction items below
+        </p>
+
+        <div id="successMessage" class="success-message">
+          ✓ Your items have been submitted successfully! Check your email for
+          updates.
+        </div>
+        <div id="errorMessage" class="error-message">
+          ✗ An error occurred. Please try again.
+        </div>
+
+        <div class="disclaimer">
+          <strong>📋 Verified Information:</strong> Auctions for verified items
+          priced below £20,000 will be conducted online for your convenience and
+          safety. Items exceeding £20,000 may be offered in our physical
+          auctions. All submissions are subject to our verification process.
+        </div>
+
+        <form id="sellerForm">
+          <!-- Seller Information -->
+          <div class="form-group">
+            <label>Your Full Name *</label>
+            <input type="text" id="name" required placeholder="John Doe" />
+          </div>
+
+          <div class="form-group">
+            <label>Email Address * (You'll use this to track your items)</label>
+            <input
+              type="email"
+              id="email"
+              required
+              placeholder="your@email.com"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Phone Number *</label>
+            <input
+              type="tel"
+              id="phone"
+              required
+              placeholder="+44 123 456 7890"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Company Name (Optional)</label>
+            <input
+              type="text"
+              id="companyName"
+              placeholder="Your Business Name"
+            />
+          </div>
+
+          <!-- Items Information -->
+          <div class="form-group">
+            <label>Describe Your Items *</label>
+            <textarea
+              id="itemDetails"
+              required
+              placeholder="Describe all items you wish to submit for auction. Include details about condition, age, materials, and any special features..."
+            ></textarea>
+          </div>
+
+          <button type="submit" class="form-submit">Submit Your Items</button>
+        </form>
+
+        <p
+          style="
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 12px;
+            margin-top: 20px;
+          "
+        >
+          By submitting, you agree to our terms. We'll verify your submission
+          and contact you within 24 hours.
+        </p>
+      </div>
+    </section>
+
+    <!-- Browse Auctions Section -->
+    <section id="browse" style="background-color: #ecf0f1; padding: 60px 20px">
+      <div class="form-container" style="max-width: 500px">
+        <h2>🔐 Access Private Auctions</h2>
+        <p style="color: #7f8c8d; margin-bottom: 20px; text-align: center">
+          Auctions are invitation-only. Enter your access code to view exclusive
+          items.
+        </p>
+
+        <div id="qrBrowseMessage" class="error" style="display: none"></div>
+
+        <form id="qrForm" style="display: flex; gap: 10px; margin-bottom: 20px">
+          <input
+            type="text"
+            id="qrCode"
+            placeholder="Paste QR code here (e.g., QR-ART-2026-001)"
+            required
+            style="flex: 1"
+          />
+          <button type="submit" class="btn btn-primary" style="flex: 0 0 auto">
+            Go
+          </button>
+        </form>
+
+        <div style="text-align: center; color: #7f8c8d; font-size: 12px">
+          <p>— Or —</p>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          style="width: 100%"
+          onclick="startQRScan()"
+        >
+          📱 Scan QR Code with Camera
+        </button>
+
+        <div
+          id="qrScanner"
+          style="
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+          "
+        >
+          <p style="color: #7f8c8d; font-size: 12px; margin-bottom: 10px">
+            📷 Your browser will request camera access. Point at the QR code.
+          </p>
+          <video
+            id="cameraFeed"
+            style="width: 100%; border-radius: 4px; display: none"
+          ></video>
+          <p
+            id="scanStatus"
+            style="
+              text-align: center;
+              color: #3498db;
+              font-weight: bold;
+              margin-top: 10px;
+            "
+          ></p>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            style="width: 100%; margin-top: 10px"
+            onclick="stopQRScan()"
+          >
+            ✕ Stop Scanning
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>🏛️ Fotherbys</h4>
+          <p>Your premier destination for selling fine items at auction.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <a href="#sell">Submit Items</a>
+          <a href="/seller/my-items">My Items</a>
+          <a href="#">Contact Us</a>
+        </div>
+        <div class="footer-section">
+          <h4>Information</h4>
+          <a href="#">How It Works</a>
+          <a href="#">Pricing</a>
+          <a href="#">FAQ</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Fotherbys Auction House. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script>
+      // QR Form Submit
+      document
+        .getElementById("qrForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const qrCode = document.getElementById("qrCode").value.trim();
+          const msgDiv = document.getElementById("qrBrowseMessage");
+          msgDiv.style.display = "none";
+
+          if (!qrCode) {
+            msgDiv.textContent = "Please enter a QR code";
+            msgDiv.style.display = "block";
+            return;
+          }
+
+          try {
+            const response = await fetch("/api/public/verify-qr", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ qrCode }),
+            });
+
+            const data = await response.json();
+            if (response.ok && data.data) {
+              window.location.href = data.data.redirectTo;
+            } else {
+              msgDiv.textContent = "✗ " + (data.message || "Invalid QR code");
+              msgDiv.classList.add("show");
+              msgDiv.style.display = "block";
+            }
+          } catch (error) {
+            msgDiv.textContent = "✗ Error: " + error.message;
+            msgDiv.style.display = "block";
+          }
+        });
+
+      // QR Scanner (placeholder - full implementation in Sprint 2)
+      function startQRScan() {
+        document.getElementById("qrScanner").style.display = "block";
+        document.getElementById("scanStatus").textContent =
+          "Camera access requested...";
+        alert(
+          "📱 QR scanning feature will be available in production.\nFor now, please paste the QR code directly."
+        );
+        document.getElementById("qrScanner").style.display = "none";
+      }
+
+      function stopQRScan() {
+        document.getElementById("qrScanner").style.display = "none";
+      }
+
+      // Seller Form
+      document
+        .getElementById("sellerForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const successMsg = document.getElementById("successMessage");
+          const errorMsg = document.getElementById("errorMessage");
+          successMsg.style.display = "none";
+          errorMsg.style.display = "none";
+
+          const sellerData = {
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            phone: document.getElementById("phone").value,
+            companyName:
+              document.getElementById("companyName").value || "Private Seller",
+            itemDetails: document.getElementById("itemDetails").value,
+          };
+
+          try {
+            const response = await fetch("/api/public/submit-items", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(sellerData),
+            });
+
+            if (response.ok) {
+              successMsg.style.display = "block";
+              document.getElementById("sellerForm").reset();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            } else {
+              const error = await response.json();
+              errorMsg.textContent =
+                "✗ " + (error.message || "Failed to submit items");
+              errorMsg.style.display = "block";
+            }
+          } catch (error) {
+            errorMsg.textContent = "✗ Error: " + error.message;
+            errorMsg.style.display = "block";
+          }
+        });
+
+      // QR Code Modal Functions
+      function openQRModal(auctionId, auctionTitle) {
+        const backdrop = document.getElementById('qrModalBackdrop');
+        const modal = document.getElementById('qrModal');
+        const qrInput = document.getElementById('qrModalCode');
+        const qrTitle = document.getElementById('qrTitle');
+        const qrError = document.getElementById('qrError');
+        
+        if (backdrop && modal && qrInput && qrTitle && qrError) {
+          backdrop.style.display = 'block';
+          modal.style.display = 'block';
+          qrInput.value = '';
+          qrError.style.display = 'none';
+          qrError.textContent = '';
+          qrTitle.textContent = auctionTitle;
+          document.getElementById('qrAuctionId').value = auctionId;
+          setTimeout(() => qrInput.focus(), 100);
+        }
+      }
+
+      function closeQRModal() {
+        const backdrop = document.getElementById('qrModalBackdrop');
+        const modal = document.getElementById('qrModal');
+        if (backdrop && modal) {
+          backdrop.style.display = 'none';
+          modal.style.display = 'none';
+        }
+      }
+
+      function submitQRCode() {
+        console.log('submitQRCode called');
+        
+        const qrInput = document.getElementById('qrModalCode');
+        const qrError = document.getElementById('qrError');
+        
+        console.log('qrInput element:', qrInput);
+        console.log('qrError element:', qrError);
+        
+        if (!qrInput) {
+          console.error('QR input element not found');
+          alert('Error: QR code input field not found');
+          return;
+        }
+        
+        if (!qrError) {
+          console.error('QR error element not found');
+          return;
+        }
+        
+        console.log('qrInput.value raw:', qrInput.value);
+        console.log('qrInput.value type:', typeof qrInput.value);
+        console.log('qrInput dataset:', qrInput.dataset);
+        console.log('qrInput attributes:');
+        for (let attr of qrInput.attributes) {
+          console.log(`  ${attr.name}: ${attr.value}`);
+        }
+        
+        const code = qrInput.value.trim();
+        console.log('QR Code value:', code);
+        console.log('QR Code length:', code.length);
+        
+        if (!code || code.length === 0) {
+          qrError.textContent = 'Please enter a QR code';
+          qrError.style.display = 'block';
+          console.log('Error shown: empty code');
+          return;
+        }
+        
+        console.log('Submitting QR code:', code);
+        window.location.href = '/qr/' + encodeURIComponent(code);
+      }
+
+      // Setup event listeners when DOM is ready
+      document.addEventListener('DOMContentLoaded', function() {
+        const qrInput = document.getElementById('qrModalCode');
+        const qrError = document.getElementById('qrError');
+        
+        if (qrInput) {
+          // Clear error message when user starts typing
+          qrInput.addEventListener('input', function() {
+            if (qrError) {
+              qrError.style.display = 'none';
+            }
+          });
+          
+          // Submit on Enter key
+          qrInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              submitQRCode();
+            }
+          });
+        }
+      });
+    </script>
+
+    <!-- QR Code Modal -->
+    <div id="qrModalBackdrop" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 999;"></div>
+    <div id="qrModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 40px; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 1000; max-width: 500px; width: 90%;">
+      <h2 style="color: #2c3e50; margin-bottom: 10px; text-align: center;">🔐 Private Auction Access</h2>
+      <p style="color: #7f8c8d; text-align: center; margin-bottom: 20px;">Access the private auction <strong><span id="qrTitle"></span></strong></p>
+      <div style="background: #f0f8ff; border: 1px solid #3498db; padding: 15px; border-radius: 4px; margin-bottom: 20px; text-align: center;">
+        <p style="margin: 0; color: #2980b9; font-size: 14px;">Please enter or scan your QR code to access this private auction</p>
+      </div>
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50;">QR Code:</label>
+        <input type="text" id="qrModalCode" placeholder="Enter QR code or scan here" style="width: 100%; padding: 12px; border: 2px solid #3498db; border-radius: 4px; font-size: 16px;" autofocus>
+      </div>
+      <div id="qrError" style="display: none; background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 10px; border-radius: 4px; margin-bottom: 15px;"></div>
+      <div style="display: flex; gap: 10px;">
+        <button onclick="submitQRCode()" style="flex: 1; background: #3498db; color: white; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: 600;">Access Auction</button>
+        <button onclick="closeQRModal()" style="flex: 1; background: #95a5a6; color: white; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: 600;">Cancel</button>
+      </div>
+      <input type="hidden" id="qrAuctionId">
+    </div>
+  </body>
+</html>
